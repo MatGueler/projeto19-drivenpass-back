@@ -29,10 +29,10 @@ model Credentials {
 }
 
 model Notes {
-  id             Int    @id @default(autoincrement())
-  user           Users  @relation(fields: [userId], references: [id])
+  id             Int     @id @default(autoincrement())
+  user           Users   @relation(fields: [userId], references: [id])
   userId         Int
-  number         String @unique
+  number         String  @unique
   name           String
   cvc            String
   expirationDate String
