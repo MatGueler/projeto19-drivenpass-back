@@ -14,6 +14,7 @@ model Users {
   password    String
   Credentials Credentials[]
   Cards       Cards[]
+  Notes       Notes[]
 }
 
 model Credentials {
@@ -36,4 +37,12 @@ model Cards {
   type           String
   isVirtual      Boolean @default(false)
   user           Users   @relation(fields: [userId], references: [id])
+}
+
+model Notes {
+  id         Int    @id @default(autoincrement())
+  userId     Int
+  name       String
+  annotation String
+  user       Users  @relation(fields: [userId], references: [id])
 }
