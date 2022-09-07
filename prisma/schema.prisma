@@ -15,6 +15,8 @@ model Users {
   Credentials Credentials[]
   Cards       Cards[]
   Notes       Notes[]
+  Wifi        Wifi[]
+  Urls        Urls[]
 }
 
 model Credentials {
@@ -24,6 +26,7 @@ model Credentials {
   name     String
   password String
   user     Users  @relation(fields: [userId], references: [id])
+  url      Urls   @relation(fields: [urlId], references: [id])
 }
 
 model Cards {
@@ -45,4 +48,21 @@ model Notes {
   name       String
   annotation String
   user       Users  @relation(fields: [userId], references: [id])
+}
+
+model Wifi {
+  id          Int    @id @default(autoincrement())
+  userId      Int
+  Networkname String
+  password    String
+  label       String
+  user        Users  @relation(fields: [userId], references: [id])
+}
+
+model Urls {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  url         String
+  user        Users         @relation(fields: [userId], references: [id])
+  Credentials Credentials[]
 }
