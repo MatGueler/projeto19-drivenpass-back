@@ -7,3 +7,10 @@ export async function CreateNote(req: Request, res: Response) {
   const newNote = await service.newNote(infos);
   res.sendStatus(201);
 }
+
+export async function fetchNote(req: Request, res: Response) {
+  const { id } = req.params;
+  console.log(id);
+  const getNote = await service.getNote(Number(id));
+  res.sendStatus(201);
+}
