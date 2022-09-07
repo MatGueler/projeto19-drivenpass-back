@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id          Int           @id @default(autoincrement())
+  name        String
+  email       String        @unique
+  password    String
+  Credentials Credentials[]
+  Cards       Cards[]
+  Notes       Notes[]
+  Wifi        Wifi[]
+  Urls        Urls[]
+}
+
+model Credentials {
+  id       Int    @id @default(autoincrement())
+  userId   Int
+  urlId    Int
+  name     String
+  password String
+  user     Users  @relation(fields: [userId], references: [id])
+  url      Urls   @relation(fields: [urlId], references: [id])
+}
+
+model Cards {
+  id             Int     @id @default(autoincrement())
+  userId         Int
+  number         String  @unique
+  name           String
+  cvc            String
+  expirationDate String
+  password       String
+  type           String
+  isVirtual      Boolean @default(false)
+  user           Users   @relation(fields: [userId], references: [id])
+}
+
+model Notes {
+  id         Int    @id @default(autoincrement())
+  userId     Int
+  name       String
+  annotation String
+  user       Users  @relation(fields: [userId], references: [id])
+}
+
+model Wifi {
+  id          Int    @id @default(autoincrement())
+  userId      Int
+  Networkname String
+  password    String
+  label       String
+  user        Users  @relation(fields: [userId], references: [id])
+}
+
+model Urls {
+  id          Int           @id @default(autoincrement())
+  userId      Int
+  url         String
+  user        Users         @relation(fields: [userId], references: [id])
+  Credentials Credentials[]
+}
