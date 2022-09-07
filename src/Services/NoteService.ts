@@ -5,3 +5,8 @@ export async function newNote(infos: InoteInfo) {
   console.log(title);
   return title;
 }
+
+export async function getNote(id: number) {
+  console.log(id);
+  return id;
+}
