@@ -16,3 +16,11 @@ model Users {
 	email String @unique
 	password String
 }
+
+model Credentials {
+	id Int @id @default(autoincrement())
+  userId Int
+	urlId Int
+	name String
+	password String
+}
