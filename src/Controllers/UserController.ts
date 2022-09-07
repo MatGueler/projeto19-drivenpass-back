@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as service from "../Services/registerService";
+import * as service from "../Services/UserService";
 
 export async function registerUser(req: Request, res: Response) {
   const infos: {
@@ -12,7 +12,7 @@ export async function registerUser(req: Request, res: Response) {
     infos.email,
     infos.password
   );
-  res.sendStatus(201);
+  res.status(201).send(registerUser);
 }
 
 export async function loginUser(req: Request, res: Response) {
