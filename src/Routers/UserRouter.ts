@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUser, registerUser } from "../Controllers/userController";
+import { loginUser, registerUser } from "../Controllers/UserController";
 import { validateSchema } from "../Middlewares/validateSchemaMiddleware";
 import loginSchema from "../Schemas/LoginSchema";
 import registerSchema from "../Schemas/RegisterSchema";
