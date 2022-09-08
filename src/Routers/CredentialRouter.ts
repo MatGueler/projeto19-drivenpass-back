@@ -5,12 +5,14 @@ import {
   GetCredentialById,
 } from "../Controllers/CredentialController";
 import { validateSchema } from "../Middlewares/validateSchemaMiddleware";
+import { validatingToken } from "../Middlewares/ValidateToken";
 import CredentialSchema from "../Schemas/CredentialSchema";
 
 const CredentialRouter = Router();
 
 CredentialRouter.post(
   "/new/credential",
+  validatingToken,
   validateSchema(CredentialSchema),
   CreateCredential
 );

@@ -10,6 +10,7 @@ export async function registerUser(req: Request, res: Response) {
 
 export async function loginUser(req: Request, res: Response) {
   const infos: ILoginUser = req.body;
-  const registerUser = await service.loginUser(infos);
-  res.sendStatus(200);
+  const userId = res.locals.userId;
+  const token = await service.loginUser(infos, userId);
+  res.status(200).send(token);
 }

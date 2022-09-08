@@ -4,7 +4,8 @@ import { ICreateCredencial } from "../Types/CredentialTypes";
 
 export async function CreateCredential(req: Request, res: Response) {
   const infos: ICreateCredencial = req.body;
-  const newCredential = await service.newCredential(infos);
+  const userId = res.locals.userId;
+  const newCredential = await service.newCredential(infos, userId);
   res.sendStatus(201);
 }
 
