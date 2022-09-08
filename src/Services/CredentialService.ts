@@ -7,14 +7,16 @@ import * as repository from "../Repositories/CredentialRepository";
 dotenv.config();
 
 export async function newCredential(infos: ICreateCredencial, userId: number) {
-  verifyCredentialExist(infos, userId);
-  // const urlId = repository.getUrl(infos.url)
+  await verifyCredentialExist(infos, userId);
+  const urlId = await verifyUrl(infos.url);
   const encryptedPassword = encryptString(infos.password);
   const credential = {
     userId,
-    name: infos.name,
+    urlId: Number(urlId),
+    name: infos.title,
     password: encryptedPassword,
   };
+  await repository.createCredential(credential);
 }
 
 export async function getCredentialById(id: number) {
@@ -42,6 +44,19 @@ async function verifyCredentialExist(infos: ICreateCredencial, userId: number) {
   const credentialByName = await repository.verifyNameCredential(infos, userId);
   if (credentialByName) {
     throw { code: "Unauthorized", message: "Credential already exist" };
+  }
+}
+async function verifyUrl(url: string) {
+  let urlId = await repository.getUrl(url);
+
+  if (urlId) {
+    return urlId.id;
+  } else {
+    await repository.createUrl(url);
+  }
+  urlId = await repository.getUrl(url);
+  if (urlId) {
+    return urlId.id;
   }
 }
 
