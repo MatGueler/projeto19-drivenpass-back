@@ -5,7 +5,7 @@ import { ILoginUser, IRegisterUser } from "../Types/UserTypes";
 export async function registerUser(req: Request, res: Response) {
   const infos: IRegisterUser = req.body;
   const registerUser = await service.registerUser(infos);
-  res.status(201).send(registerUser);
+  res.sendStatus(201);
 }
 
 export async function loginUser(req: Request, res: Response) {
