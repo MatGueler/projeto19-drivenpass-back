@@ -1,6 +1,5 @@
-export interface IcredencialInfo {
-  name: string;
-  email: string;
-  password: string;
-  title: string;
-}
+import { Credentials } from "@prisma/client";
+
+export type IReciveCredencial = Credentials;
+
+export type ICreateCredencial = Omit<IReciveCredencial, "id">;
