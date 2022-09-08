@@ -10,7 +10,6 @@ export async function newCredential(infos: ICreateCredencial) {
   // verifyUserExist(infos.email);
   const credentialByName = await repository.verifyNameCredential(infos);
   verifyCredentialExist(credentialByName);
-  console.log(credentialByName);
   const encryptedString = encryptString(infos.password);
   return encryptedString;
 }
@@ -18,6 +17,12 @@ export async function newCredential(infos: ICreateCredencial) {
 export async function getCredentialById(id: number) {
   const credentialById = await repository.getCredentialById(id);
   verifyCredentialNoExist(credentialById);
+  return credentialById;
+}
+
+export async function getAllCredentials() {
+  const credentialById = await repository.getAllCredential();
+  // verifyCredentialNoExist(credentialById);
   return credentialById;
 }
 

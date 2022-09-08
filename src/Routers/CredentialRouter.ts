@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   CreateCredential,
+  getAllCredentials,
   GetCredentialById,
 } from "../Controllers/CredentialController";
 import { validateSchema } from "../Middlewares/validateSchemaMiddleware";
@@ -15,5 +16,6 @@ CredentialRouter.post(
 );
 
 CredentialRouter.get("/credential/:id", GetCredentialById);
+CredentialRouter.get("/credentials", getAllCredentials);
 
 export default CredentialRouter;

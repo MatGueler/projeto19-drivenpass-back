@@ -14,3 +14,8 @@ export async function getCredentialById(id: number) {
   });
   return credential;
 }
+
+export async function getAllCredential() {
+  const credential = await prisma.credentials.findMany();
+  return credential;
+}
