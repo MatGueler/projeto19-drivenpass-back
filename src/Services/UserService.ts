@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import * as repository from "../Repositories/UserRepository";
 import { ILoginUser, IRegisterUser } from "../Types/UserTypes";
 
 export async function registerUser(infos: IRegisterUser) {
   const cryptPassword = await encryptPassword(infos.password);
-  const verify = await verifyUserExist(infos.email);
+  const verify = await verifyUserEmail(infos.email);
   const infosRegister = {
     name: infos.name,
     email: infos.email,
@@ -15,17 +16,17 @@ export async function registerUser(infos: IRegisterUser) {
   return cryptPassword;
 }
 
-export async function loginUser(infos: ILoginUser) {
-  const user = await verifyUserNoExist(infos.email);
+export async function loginUser(infos: ILoginUser, userId: number) {
+  const user = await verifyUserNoExist(infos.email, userId);
+  const JWT_SECRET = String(process.env.JWT_SECRET);
   const token = jwt.sign(
     {
-      data: user.id,
+      id: Number(user.id),
     },
-    "secret",
+    JWT_SECRET,
     { expiresIn: 60 * 60 * 24 }
   );
-  var decoded = jwt.decode(token);
-  console.log(token);
+  return token;
 }
 
 export async function encryptPassword(password: string) {
@@ -34,18 +35,18 @@ export async function encryptPassword(password: string) {
   return cryptPassword;
 }
 
-async function verifyUserExist(email: string) {
-  const verifyUserExist = await repository.verifyUserExist(email);
-  if (verifyUserExist) {
+async function verifyUserEmail(email: string) {
+  const verifyUserEmail = await repository.verifyUserEmail(email);
+  if (verifyUserEmail) {
     throw { code: "Unauthorized", message: "Account alreaady exist" };
   }
-  return verifyUserExist;
+  return verifyUserEmail;
 }
 
-async function verifyUserNoExist(email: string) {
-  const verifyUserExist = await repository.verifyUserExist(email);
+async function verifyUserNoExist(email: string, userId: number) {
+  const verifyUserExist = await repository.verifyUserExist(email, userId);
   if (!verifyUserExist) {
-    throw { code: "Unauthorized", message: "Account alreaady exist" };
+    throw { code: "Unauthorized", message: "Account doesn't exist" };
   }
   return verifyUserExist;
 }
