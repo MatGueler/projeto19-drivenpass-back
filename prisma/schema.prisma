@@ -16,7 +16,6 @@ model Users {
   Cards       Cards[]
   Notes       Notes[]
   Wifi        Wifi[]
-  Urls        Urls[]
 }
 
 model Credentials {
@@ -61,8 +60,6 @@ model Wifi {
 
 model Urls {
   id          Int           @id @default(autoincrement())
-  userId      Int
   url         String
-  user        Users         @relation(fields: [userId], references: [id])
   Credentials Credentials[]
 }
