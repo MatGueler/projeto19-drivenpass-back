@@ -38,7 +38,7 @@ model Cards {
   expirationDate String
   password       String
   type           String
-  isVirtual      Boolean @default(false)
+  isVirtual      Boolean
   user           Users   @relation(fields: [userId], references: [id])
 }
 

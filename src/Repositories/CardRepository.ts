@@ -1,9 +1,8 @@
 import prisma from "../Database/prisma";
 import { ICreateCard } from "../Types/CardTypes";
-import { ICreateNote } from "../Types/NoteType";
 
 export async function cardByName(name: string, userId: number) {
-  const cards = await prisma.notes.findFirst({
+  const cards = await prisma.cards.findFirst({
     where: { userId, name },
   });
   return cards;
@@ -16,11 +15,11 @@ export async function getNoteById(id: number) {
   return notes;
 }
 
-export async function getAllNotes(userId: number) {
-  const notes = await prisma.notes.findMany({
+export async function getAllCards(userId: number) {
+  const cards = await prisma.cards.findMany({
     where: { userId },
   });
-  return notes;
+  return cards;
 }
 
 export async function createCard(card: ICreateCard) {

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CreateCard } from "../Controllers/CardController";
+import { CreateCard, getAllCards } from "../Controllers/CardController";
 import { validateSchema } from "../Middlewares/validateSchemaMiddleware";
 import { validatingToken } from "../Middlewares/ValidateToken";
 import CardSchema from "../Schemas/CardSchema";
@@ -12,5 +12,6 @@ CardRouter.post(
   validatingToken,
   CreateCard
 );
+CardRouter.get("/cards", validatingToken, getAllCards);
 
 export default CardRouter;
