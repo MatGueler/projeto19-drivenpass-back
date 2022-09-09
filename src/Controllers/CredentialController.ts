@@ -21,7 +21,6 @@ export async function GetCredentialById(req: Request, res: Response) {
 
 export async function getAllCredentials(req: Request, res: Response) {
   const userId = res.locals.userId;
-  const credential = await service.getAllCredentials(userId);
-  console.log(credential);
-  res.sendStatus(200);
+  const credentials = await service.getAllCredentials(userId);
+  res.status(200).send(credentials);
 }
