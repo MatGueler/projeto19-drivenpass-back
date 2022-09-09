@@ -27,7 +27,6 @@ export async function deleteNoteById(id: number, userId: number) {
   const noteById = await repository.getNoteById(id);
   await verifyNoteExist(noteById);
   await verifyUserNote(noteById, userId);
-  console.log("pode apagar");
   await repository.deleteNoteById(id);
 }
 
