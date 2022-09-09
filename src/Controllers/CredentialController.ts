@@ -11,12 +11,23 @@ export async function CreateCredential(req: Request, res: Response) {
 
 export async function GetCredentialById(req: Request, res: Response) {
   const { id } = req.params;
-  const credential = await service.getCredentialById(Number(id));
-  res.sendStatus(200);
+  const userId = res.locals.userId;
+  const credential = await service.getCredentialById(
+    Number(id),
+    Number(userId)
+  );
+  res.status(200).send(credential);
 }
 
 export async function getAllCredentials(req: Request, res: Response) {
-  const credential = await service.getAllCredentials();
-  console.log(credential);
+  const userId = res.locals.userId;
+  const credentials = await service.getAllCredentials(userId);
+  res.status(200).send(credentials);
+}
+
+export async function deleteCredentialById(req: Request, res: Response) {
+  const { id } = req.params;
+  const userId = res.locals.userId;
+  await service.deleteCredentialById(Number(id), userId);
   res.sendStatus(200);
 }

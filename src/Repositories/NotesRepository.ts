@@ -1,14 +1,29 @@
 import prisma from "../Database/prisma";
-import { ICreateCredencial, IReciveCredencial } from "../Types/CredentialTypes";
+import { ICreateNote } from "../Types/NoteType";
 
-export async function verifyNameCredential(
-  infos: ICreateCredencial,
-  userId: number
-) {
-  const credential = await prisma.credentials.findFirst({
-    where: { userId: userId, name: infos.title },
+export async function noteByTitle(title: string, userId: number) {
+  const notes = await prisma.notes.findFirst({
+    where: { userId: userId, name: title },
   });
-  return credential;
+  return notes;
+}
+
+export async function getNoteById(id: number) {
+  const notes = await prisma.notes.findFirst({
+    where: { id },
+  });
+  return notes;
+}
+
+export async function getAllNotes(userId: number) {
+  const notes = await prisma.notes.findMany({
+    where: { userId },
+  });
+  return notes;
+}
+
+export async function createNote(note: ICreateNote) {
+  await prisma.notes.create({ data: note });
 }
 
 export async function getCredentialById(id: number) {
@@ -50,10 +65,6 @@ export async function getAllCredential(userId: number) {
 export async function getUrl(url: string) {
   const getUrl = await prisma.urls.findFirst({ where: { url } });
   return getUrl;
-}
-
-export async function createCredential(credential: IReciveCredencial) {
-  await prisma.credentials.create({ data: credential });
 }
 
 export async function createUrl(urlName: string) {

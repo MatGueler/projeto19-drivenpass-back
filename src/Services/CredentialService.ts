@@ -1,4 +1,8 @@
-import { ICreateCredencial, IReciveCredencial } from "../Types/CredentialTypes";
+import {
+  ICreateCredencial,
+  ICredential,
+  IReciveCredencial,
+} from "../Types/CredentialTypes";
 import Cryptr from "cryptr";
 import dotenv from "dotenv";
 // import { verifyUserExist } from "../Repositories/UserRepository";
@@ -7,34 +11,67 @@ import * as repository from "../Repositories/CredentialRepository";
 dotenv.config();
 
 export async function newCredential(infos: ICreateCredencial, userId: number) {
-  verifyCredentialExist(infos, userId);
-  const urlId = verifyUrl(infos.url);
+  await verifyCredentialExist(infos, userId);
+  const urlId = await verifyUrl(infos.url);
   const encryptedPassword = encryptString(infos.password);
   const credential = {
     userId,
-    name: infos.name,
+    urlId: Number(urlId),
+    name: infos.title,
     password: encryptedPassword,
   };
+  await repository.createCredential(credential);
 }
 
-export async function getCredentialById(id: number) {
-  const credentialById = await repository.getCredentialById(id);
+export async function getCredentialById(id: number, userId: number) {
+  let credentialById = await repository.getCredentialById(id);
   verifyCredentialNoExist(credentialById);
-  return credentialById;
+  await verifyUserCreedential(credentialById, userId);
+  const decryptedPassword = decryptedString(credentialById?.password);
+  const credential = { ...credentialById, password: decryptedPassword };
+  return credential;
 }
 
-export async function getAllCredentials() {
-  const credentialById = await repository.getAllCredential();
-  // verifyCredentialNoExist(credentialById);
-  return credentialById;
+export async function getAllCredentials(userId: number) {
+  const credentialById = await repository.getAllCredential(userId);
+  const credentialsDecryptedPassword = await decryptedAllPasswords(
+    credentialById
+  );
+  return credentialsDecryptedPassword;
+}
+
+export async function deleteCredentialById(id: number, userId: number) {
+  let credentialById = await repository.getCredentialById(id);
+  verifyCredentialNoExist(credentialById);
+  await verifyUserCreedential(credentialById, userId);
+  await repository.deleteCredentialById(id);
 }
 
 // General functions
-function encryptString(infos: string) {
+function decryptedString(password: string | undefined) {
   const SECRET_KEY_CRYPTR = String(process.env.SECRET_KEY_CRYPTR);
   const cryptr = new Cryptr(SECRET_KEY_CRYPTR);
-  const encryptedString = cryptr.encrypt("bacon");
-  // const decryptedString = cryptr.decrypt(encryptedString);
+  if (password) {
+    const decryptedString = cryptr.decrypt(password);
+    return decryptedString;
+  }
+}
+
+function decryptedAllPasswords(allCredentials: any) {
+  const credentialsDecryptedPassword = allCredentials.map(
+    (item: ICredential) => {
+      const decryptedPassword = decryptedString(item.password);
+      const credential = { ...item, password: decryptedPassword };
+      return credential;
+    }
+  );
+  return credentialsDecryptedPassword;
+}
+
+function encryptString(password: string) {
+  const SECRET_KEY_CRYPTR = String(process.env.SECRET_KEY_CRYPTR);
+  const cryptr = new Cryptr(SECRET_KEY_CRYPTR);
+  const encryptedString = cryptr.encrypt(password);
   return encryptedString;
 }
 
@@ -44,14 +81,27 @@ async function verifyCredentialExist(infos: ICreateCredencial, userId: number) {
     throw { code: "Unauthorized", message: "Credential already exist" };
   }
 }
+
+async function verifyUserCreedential(
+  credential: ICredential | null,
+  userId: number
+) {
+  if (credential?.userId !== userId) {
+    throw { code: "Unauthorized", message: "This message doesn't your" };
+  }
+}
+
 async function verifyUrl(url: string) {
-  const urlId = await repository.getUrl(url);
+  let urlId = await repository.getUrl(url);
+
   if (urlId) {
     return urlId.id;
   } else {
     await repository.createUrl(url);
-    const urlId = await repository.getUrl(url);
-    return urlId;
+  }
+  urlId = await repository.getUrl(url);
+  if (urlId) {
+    return urlId.id;
   }
 }
 
