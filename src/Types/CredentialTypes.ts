@@ -1,9 +1,8 @@
 import { Credentials } from "@prisma/client";
-// import { Urls } from "@prisma/client";
 
 export type IReciveCredencial = Omit<Credentials, "id">;
 
-// export type ICreateCredencial = Omit<IReciveCredencial, "id" | "urlId">;
+export type ICredential = Credentials;
 
 export interface ICreateCredencial {
   userId: number;
