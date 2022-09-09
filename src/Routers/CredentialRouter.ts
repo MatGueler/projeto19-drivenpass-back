@@ -17,7 +17,7 @@ CredentialRouter.post(
   CreateCredential
 );
 
-CredentialRouter.get("/credential/:id", GetCredentialById);
-CredentialRouter.get("/credentials", getAllCredentials);
+CredentialRouter.get("/credential/:id", validatingToken, GetCredentialById);
+CredentialRouter.get("/credentials", validatingToken, getAllCredentials);
 
 export default CredentialRouter;
