@@ -40,6 +40,13 @@ export async function getAllCredentials(userId: number) {
   return credentialsDecryptedPassword;
 }
 
+export async function deleteCredentialById(id: number, userId: number) {
+  let credentialById = await repository.getCredentialById(id);
+  verifyCredentialNoExist(credentialById);
+  await verifyUserCreedential(credentialById, userId);
+  await repository.deleteCredentialById(id);
+}
+
 // General functions
 function decryptedString(password: string | undefined) {
   const SECRET_KEY_CRYPTR = String(process.env.SECRET_KEY_CRYPTR);
