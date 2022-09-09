@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { CreateCard, getAllCards } from "../Controllers/CardController";
+import {
+  CreateCard,
+  deleteCardById,
+  getAllCards,
+  getCardById,
+} from "../Controllers/CardController";
 import { validateSchema } from "../Middlewares/validateSchemaMiddleware";
 import { validatingToken } from "../Middlewares/ValidateToken";
 import CardSchema from "../Schemas/CardSchema";
@@ -13,5 +18,7 @@ CardRouter.post(
   CreateCard
 );
 CardRouter.get("/cards", validatingToken, getAllCards);
+CardRouter.get("/card/:id", validatingToken, getCardById);
+CardRouter.delete("/card/delete/:id", validatingToken, deleteCardById);
 
 export default CardRouter;

@@ -8,11 +8,11 @@ export async function cardByName(name: string, userId: number) {
   return cards;
 }
 
-export async function getNoteById(id: number) {
-  const notes = await prisma.notes.findFirst({
+export async function getCardById(id: number) {
+  const card = await prisma.cards.findFirst({
     where: { id },
   });
-  return notes;
+  return card;
 }
 
 export async function getAllCards(userId: number) {
@@ -26,6 +26,6 @@ export async function createCard(card: ICreateCard) {
   await prisma.cards.create({ data: card });
 }
 
-export async function deleteNoteById(id: number) {
-  await prisma.notes.delete({ where: { id } });
+export async function deleteCardById(id: number) {
+  await prisma.cards.delete({ where: { id } });
 }

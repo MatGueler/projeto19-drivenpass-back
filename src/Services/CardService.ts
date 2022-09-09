@@ -1,4 +1,4 @@
-import { ICardInfo } from "../Types/CardTypes";
+import { ICardInfo, ICrads } from "../Types/CardTypes";
 import * as repository from "../Repositories/CardRepository";
 import Cryptr from "cryptr";
 import dotenv from "dotenv";
@@ -19,18 +19,23 @@ export async function newCard(infos: ICardInfo, userId: number) {
   return infos;
 }
 
-// export async function getCredentialById(id: number, userId: number) {
-//   let credentialById = await repository.getCredentialById(id);
-//   verifyCredentialNoExist(credentialById);
-//   await verifyUserCreedential(credentialById, userId);
-//   const decryptedPassword = decryptedString(credentialById?.password);
-//   const credential = { ...credentialById, password: decryptedPassword };
-//   return credential;
-// }
+export async function getCardById(id: number, userId: number) {
+  let cardById = await repository.getCardById(id);
+  await verifyCardNoExist(cardById);
+  await verifyUserCard(cardById, userId);
+  return cardById;
+}
 
 export async function getAllCards(userId: number) {
   const credentialById = await repository.getAllCards(userId);
   return credentialById;
+}
+
+export async function deleteCardById(id: number, userId: number) {
+  const noteById = await repository.getCardById(id);
+  await verifyCardNoExist(noteById);
+  await verifyUserCard(noteById, userId);
+  await repository.deleteCardById(id);
 }
 
 async function verifyNameUser(name: string, userId: number) {
@@ -47,14 +52,14 @@ function encryptString(password: string) {
   return encryptedString;
 }
 
-// async function verifyNoteExist(note: INote | null) {
-//   if (!note) {
-//     throw { code: "Unauthorized", message: "This note doesn't exist" };
-//   }
-// }
+async function verifyCardNoExist(card: ICrads | null) {
+  if (!card) {
+    throw { code: "Unauthorized", message: "This card doesn't exist" };
+  }
+}
 
-// async function verifyUserNote(note: INote | null, userId: number) {
-//   if (note?.userId !== userId) {
-//     throw { code: "Unauthorized", message: "This note doesn't your" };
-//   }
-// }
+async function verifyUserCard(note: ICrads | null, userId: number) {
+  if (note?.userId !== userId) {
+    throw { code: "Unauthorized", message: "This note doesn't your" };
+  }
+}
