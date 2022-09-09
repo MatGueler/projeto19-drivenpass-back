@@ -24,3 +24,10 @@ export async function getAllCredentials(req: Request, res: Response) {
   const credentials = await service.getAllCredentials(userId);
   res.status(200).send(credentials);
 }
+
+export async function deleteCredentialById(req: Request, res: Response) {
+  const { id } = req.params;
+  const userId = res.locals.userId;
+  await service.deleteCredentialById(Number(id), userId);
+  res.sendStatus(200);
+}

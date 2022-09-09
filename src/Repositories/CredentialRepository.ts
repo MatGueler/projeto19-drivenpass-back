@@ -59,3 +59,7 @@ export async function createCredential(credential: IReciveCredencial) {
 export async function createUrl(urlName: string) {
   await prisma.urls.create({ data: { url: urlName } });
 }
+
+export async function deleteCredentialById(id: number) {
+  await prisma.credentials.delete({ where: { id } });
+}
