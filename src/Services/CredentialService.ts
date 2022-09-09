@@ -26,7 +26,7 @@ export async function newCredential(infos: ICreateCredencial, userId: number) {
 export async function getCredentialById(id: number, userId: number) {
   let credentialById = await repository.getCredentialById(id);
   verifyCredentialNoExist(credentialById);
-  verifyUserCreedential(credentialById, userId);
+  await verifyUserCreedential(credentialById, userId);
   const decryptedPassword = decryptedString(credentialById?.password);
   const credential = { ...credentialById, password: decryptedPassword };
   return credential;
@@ -34,7 +34,10 @@ export async function getCredentialById(id: number, userId: number) {
 
 export async function getAllCredentials(userId: number) {
   const credentialById = await repository.getAllCredential(userId);
-  return credentialById;
+  const credentialsDecryptedPassword = await decryptedAllPasswords(
+    credentialById
+  );
+  return credentialsDecryptedPassword;
 }
 
 // General functions
@@ -47,11 +50,21 @@ function decryptedString(password: string | undefined) {
   }
 }
 
-function encryptString(infos: string) {
+function decryptedAllPasswords(allCredentials: any) {
+  const credentialsDecryptedPassword = allCredentials.map(
+    (item: ICredential) => {
+      const decryptedPassword = decryptedString(item.password);
+      const credential = { ...item, password: decryptedPassword };
+      return credential;
+    }
+  );
+  return credentialsDecryptedPassword;
+}
+
+function encryptString(password: string) {
   const SECRET_KEY_CRYPTR = String(process.env.SECRET_KEY_CRYPTR);
   const cryptr = new Cryptr(SECRET_KEY_CRYPTR);
-  const encryptedString = cryptr.encrypt("bacon");
-  // const decryptedString = cryptr.decrypt(encryptedString);
+  const encryptedString = cryptr.encrypt(password);
   return encryptedString;
 }
 
