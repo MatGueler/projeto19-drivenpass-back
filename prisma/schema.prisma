@@ -32,6 +32,7 @@ model Cards {
   id             Int     @id @default(autoincrement())
   userId         Int
   number         String  @unique
+  cardHolderName String
   name           String
   cvc            String
   expirationDate String
