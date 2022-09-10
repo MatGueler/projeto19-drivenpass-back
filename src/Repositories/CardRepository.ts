@@ -11,6 +11,13 @@ export async function cardByName(name: string, userId: number) {
 export async function getCardById(id: number) {
   const card = await prisma.cards.findFirst({
     where: { id },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
   return card;
 }
@@ -18,6 +25,13 @@ export async function getCardById(id: number) {
 export async function getAllCards(userId: number) {
   const cards = await prisma.cards.findMany({
     where: { userId },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
   return cards;
 }
