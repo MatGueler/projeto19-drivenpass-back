@@ -32,12 +32,13 @@ model Cards {
   id             Int     @id @default(autoincrement())
   userId         Int
   number         String  @unique
+  cardHolderName String
   name           String
   cvc            String
   expirationDate String
   password       String
   type           String
-  isVirtual      Boolean @default(false)
+  isVirtual      Boolean
   user           Users   @relation(fields: [userId], references: [id])
 }
 

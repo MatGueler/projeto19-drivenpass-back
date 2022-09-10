@@ -1,9 +1,7 @@
-export interface ICardInfo {
-  cardNumber: string;
-  name: string;
-  cvc: string;
-  expirationData: string;
-  password: string;
-  isVirtual: boolean;
-  type: string;
-}
+import { Cards } from "@prisma/client";
+
+export type ICrads = Cards;
+
+export type ICreateCard = Omit<ICrads, "id">;
+
+export type ICardInfo = Omit<ICrads, "id" | "userId">;

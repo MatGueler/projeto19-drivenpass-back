@@ -23,6 +23,13 @@ export async function getNoteById(id: number, userId: number) {
   return noteById;
 }
 
+export async function deleteNoteById(id: number, userId: number) {
+  const noteById = await repository.getNoteById(id);
+  await verifyNoteExist(noteById);
+  await verifyUserNote(noteById, userId);
+  await repository.deleteNoteById(id);
+}
+
 async function verifyTitleUser(title: string, userId: number) {
   const notes = await repository.noteByTitle(title, userId);
   if (notes) {
