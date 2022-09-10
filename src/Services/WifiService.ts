@@ -28,12 +28,12 @@ export async function getAllWifi(userId: number) {
   return wifiById;
 }
 
-// export async function deleteCardById(id: number, userId: number) {
-//   const noteById = await repository.getCardById(id);
-//   await verifyCardNoExist(noteById);
-//   await verifyUserCard(noteById, userId);
-//   await repository.deleteCardById(id);
-// }
+export async function deleteWifiById(id: number, userId: number) {
+  const wifiById = await repository.getWifiById(id);
+  await verifyWifiNoExist(wifiById);
+  await verifyUserWifi(wifiById, userId);
+  await repository.deleteWifiById(id);
+}
 
 function encryptString(password: string) {
   const SECRET_KEY_CRYPTR = String(process.env.SECRET_KEY_CRYPTR);

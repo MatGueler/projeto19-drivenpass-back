@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   CreateWifi,
+  deleteWifiById,
   getAllWifi,
   getWifiById,
 } from "../Controllers/WifiController";
@@ -18,6 +19,6 @@ WifiRouter.post(
 );
 WifiRouter.get("/wifi", validatingToken, getAllWifi);
 WifiRouter.get("/wifi/:id", validatingToken, getWifiById);
-// WifiRouter.delete("/wifi/delete/:id", validatingToken, deleteCardById);
+WifiRouter.delete("/wifi/delete/:id", validatingToken, deleteWifiById);
 
 export default WifiRouter;

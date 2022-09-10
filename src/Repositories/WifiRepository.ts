@@ -33,6 +33,6 @@ export async function getAllWifi(userId: number) {
   return wifi;
 }
 
-export async function deleteCardById(id: number) {
-  await prisma.cards.delete({ where: { id } });
+export async function deleteWifiById(id: number) {
+  await prisma.wifi.delete({ where: { id } });
 }

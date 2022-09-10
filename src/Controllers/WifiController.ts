@@ -22,9 +22,9 @@ export async function getAllWifi(req: Request, res: Response) {
   res.status(200).send(wifi);
 }
 
-// export async function deleteWifiById(req: Request, res: Response) {
-//   const { id } = req.params;
-//   const userId = res.locals.userId;
-//   await service.deleteCardById(Number(id), userId);
-//   res.sendStatus(200);
-// }
+export async function deleteWifiById(req: Request, res: Response) {
+  const { id } = req.params;
+  const userId = res.locals.userId;
+  await service.deleteWifiById(Number(id), userId);
+  res.sendStatus(200);
+}
