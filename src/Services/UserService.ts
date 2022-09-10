@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import * as repository from "../Repositories/UserRepository";
-import { ILoginUser, IRegisterUser } from "../Types/UserTypes";
+import { ILoginUser, IRegisterUser, IUser } from "../Types/UserTypes";
 
 export async function registerUser(infos: IRegisterUser) {
   const cryptPassword = await encryptPassword(infos.password);
@@ -18,13 +18,14 @@ export async function registerUser(infos: IRegisterUser) {
 
 export async function loginUser(infos: ILoginUser, userId: number) {
   const user = await verifyUserNoExist(infos.email, userId);
+  await verifyPassword(infos.password, user);
   const JWT_SECRET = String(process.env.JWT_SECRET);
   const token = jwt.sign(
     {
       id: Number(user.id),
     },
     JWT_SECRET,
-    { expiresIn: 60 * 60 * 24 }
+    { expiresIn: process.env.TIME_JWT }
   );
   return token;
 }
@@ -33,6 +34,13 @@ export async function encryptPassword(password: string) {
   const SALT = 10;
   const cryptPassword = bcrypt.hashSync(password, SALT);
   return cryptPassword;
+}
+
+async function verifyPassword(password: string, user: IUser) {
+  const verifyPassword = bcrypt.compareSync(password, user.password);
+  if (!verifyPassword) {
+    throw { code: "Unauthorized", message: "Incorrect data" };
+  }
 }
 
 async function verifyUserEmail(email: string) {
