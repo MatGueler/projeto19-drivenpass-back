@@ -12,15 +12,15 @@ export async function CreateWifi(req: Request, res: Response) {
 export async function getWifiById(req: Request, res: Response) {
   const { id } = req.params;
   const userId = res.locals.userId;
-  const card = await service.getWifiById(Number(id), Number(userId));
-  res.status(200).send(card);
+  const wifi = await service.getWifiById(Number(id), Number(userId));
+  res.status(200).send(wifi);
 }
 
-// export async function getAllWifi(req: Request, res: Response) {
-//   const userId = res.locals.userId;
-//   const cards = await service.getAllCards(userId);
-//   res.status(200).send(cards);
-// }
+export async function getAllWifi(req: Request, res: Response) {
+  const userId = res.locals.userId;
+  const wifi = await service.getAllWifi(userId);
+  res.status(200).send(wifi);
+}
 
 // export async function deleteWifiById(req: Request, res: Response) {
 //   const { id } = req.params;
