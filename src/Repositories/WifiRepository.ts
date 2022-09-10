@@ -19,11 +19,18 @@ export async function getWifiById(id: number) {
   return wifi;
 }
 
-export async function getAllCards(userId: number) {
-  const cards = await prisma.cards.findMany({
+export async function getAllWifi(userId: number) {
+  const wifi = await prisma.wifi.findMany({
     where: { userId },
+    include: {
+      user: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
-  return cards;
+  return wifi;
 }
 
 export async function deleteCardById(id: number) {

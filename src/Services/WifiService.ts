@@ -23,10 +23,10 @@ export async function getWifiById(id: number, userId: number) {
   return wifiById;
 }
 
-// export async function getAllCards(userId: number) {
-//   const credentialById = await repository.getAllCards(userId);
-//   return credentialById;
-// }
+export async function getAllWifi(userId: number) {
+  const wifiById = await repository.getAllWifi(userId);
+  return wifiById;
+}
 
 // export async function deleteCardById(id: number, userId: number) {
 //   const noteById = await repository.getCardById(id);

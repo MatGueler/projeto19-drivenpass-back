@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { CreateWifi, getWifiById } from "../Controllers/WifiController";
+import {
+  CreateWifi,
+  getAllWifi,
+  getWifiById,
+} from "../Controllers/WifiController";
 import { validateSchema } from "../Middlewares/validateSchemaMiddleware";
 import { validatingToken } from "../Middlewares/ValidateToken";
 import WifiSchema from "../Schemas/WifiSchema";
@@ -12,7 +16,7 @@ WifiRouter.post(
   validatingToken,
   CreateWifi
 );
-// WifiRouter.get("/wifi", validatingToken, getAllCards);
+WifiRouter.get("/wifi", validatingToken, getAllWifi);
 WifiRouter.get("/wifi/:id", validatingToken, getWifiById);
 // WifiRouter.delete("/wifi/delete/:id", validatingToken, deleteCardById);
 
