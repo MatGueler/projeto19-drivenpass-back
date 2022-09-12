@@ -14,7 +14,11 @@ export function validatingToken(
   if (!token) {
     throw { code: "Unauthorized", message: "Token not found" };
   }
-  const data: any = jwt.verify(token, JWT_SECRET);
-  res.locals.userId = data.id;
-  next();
+  try {
+    const data: any = jwt.verify(token, JWT_SECRET);
+    res.locals.userId = data.id;
+    next();
+  } catch {
+    return res.status(401).send("Token expired or ivalid");
+  }
 }
